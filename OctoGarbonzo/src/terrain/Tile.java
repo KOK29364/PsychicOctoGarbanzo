@@ -24,7 +24,6 @@ public class Tile{
 		this.orientation = orientation;
 		
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Draw the hexagonal Tile using formulas for regular hexagons */
 	public void draw(GraphicsContext gc){ 
@@ -44,13 +43,11 @@ public class Tile{
 		gc.strokePolygon(doublePoints[0], doublePoints[1], 6); 
 		
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Returns the orientation of the Tile */
 	public boolean getOrientation(){ 
 		return this.orientation;
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Returns the rectangular dimensions of the Tile */
 	public Dimension2D getDimensions(){ 
@@ -58,36 +55,40 @@ public class Tile{
 		return new Dimension2D((this.orientation)? Math.sqrt(3) * this.size:2 * this.size, (this.orientation)? 2 * this.size:Math.sqrt(3) * this.size);
 		
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Returns the size of the Tile, represented as the distance from its center to any corner */
 	public double getSize(){ 
 		return this.size;
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
+	
+	/* Changes the size of the Tile to the one provided */
+	public void setSize(double size){
+		this.size = size;
+	}
 	
 	/* Returns the coordinates of the Tile */
 	public Point2D getLocation() { 
 		return this.location;
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
+	
+	/* Sets the coordinates of the Tile to the one provided */
+	public void setLocation(Point2D p){
+		this.location = p;
+	}
 	
 	/* Changes the orientation of the Tile to the one given */
 	public void changeOrientation(boolean orientation){ 
 		this.orientation = orientation;
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Shifts the coordinates of the Tile by the provided values */
 	public void shift(double x, double y){ 
 		this.location = new Point2D(this.location.getX() + x, this.location.getY() + y);
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Returns a String representation of the Tile */
 	public String toString(){
 		return "Tile [x location: " + this.location.getX() + ", y location: " + this.location.getY() + ", size: " + this.size + "]";
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _*/
 	
 }

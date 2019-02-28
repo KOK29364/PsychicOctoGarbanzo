@@ -2,6 +2,7 @@ package terrain;
 
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -9,6 +10,7 @@ public class Grid {
 
 	private Point2D location; // The coordinates of the top left corner of the Grid on a window
 	private Tile[][] tiles; // The array representation of the Tiles forming the Grid
+	private Rectangle2D centeredIn;
 	
 	/* Initialize a new Grid with a specified number of Tiles and size for the Tiles */
 	public Grid(Dimension2D dimensions, double tileSize){
@@ -27,13 +29,11 @@ public class Grid {
 		}
 		
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Returns a String representation of the Grid */
 	public String toString(){ 
 		return "Grid [width = " + this.getSize().getWidth() + ", height = " +  this.getSize().getWidth() + "]";
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Change the orientation of the Tiles to the one given */
 	public void setTileOrientation(boolean tileOrientation){ 
@@ -53,13 +53,24 @@ public class Grid {
 		}
 		
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
+	
+	/* Set the size of all the Tiles in the Grid */
+	public void setTileSize(double tileSize){
+		double w = (tiles[0][0].getOrientation())? Math.sqrt(3) * tileSize:2 * tileSize;
+		double h = (tiles[0][0].getOrientation())? 2 * tileSize:Math.sqrt(3) * tileSize;
+		
+		for(int x = 0; x < tiles.length; x ++){
+			for(int y = 0; y < tiles[x].length; y ++){
+				tiles[x][y].setSize(tileSize);
+				tiles[x][y].setLocation(new Point2D(((w + (x * 2 * w) + ((w * (y % 2)))) / 2), ((h + (y * (1.5) * h)) / 2)));
+			}
+		}
+	}
 	
 	/* Returns the current location of the Grid */
 	public Point2D getLocation(){ 
 		return this.location;
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Returns the width and height of the entire Grid */
 	public Dimension2D getSize(){ 
@@ -68,16 +79,15 @@ public class Grid {
 		double h = this.tiles[0][0].getDimensions().getHeight();
 		
 		return new Dimension2D((this.tiles.length * w) + ((this.tiles[0][0].getOrientation())? w / 2:0),
-				(this.tiles[0].length / 2 * h * 1.75) + ((this.tiles[0][0].getOrientation())? 0:h / 2));
+							(this.tiles[0].length * h) + ((this.tiles[0][0].getOrientation())? 0:h / 2));
 	
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Moves the Grid to the defined Point */
 	public void setLocation(Point2D loc){ 
 		
 		double deltaX = loc.getX();
-		double deltaY = loc.getY() - 10;
+		double deltaY = loc.getY();
 		
 		this.location = loc; 
 		
@@ -88,13 +98,12 @@ public class Grid {
 		}
 		
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Moves the whole Grid the the center of the rectangle defined	*/
-	public void center(int x, int y, double width, double height){ 
+	public void center(double x, double y, double width, double height){
+		this.centeredIn = new Rectangle2D(x, y, width, height);
 		this.setLocation(new Point2D((width - this.getSize().getWidth()) / 2 + x, (height - this.getSize().getHeight()) / 2 + y));	
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 
 	/* Draws all the Tiles the Grid contains */
 	public void draw(GraphicsContext gc){ 
@@ -106,11 +115,21 @@ public class Grid {
 			}
 		}	
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
-	
+	/* Checks if the Grid is still centered inside the predefined centeredIn Rectangle */
+	public boolean isCentered(){	
+		if(this.centeredIn != null){
+			return !((this.centeredIn.getWidth() - this.getSize().getWidth()) / 2 == this.location.getX() && (this.centeredIn.getHeight() - this.getSize().getHeight()) / 2 == this.location.getY());
+		}
+		return false;
+	}
 	
 	public void tick(){
+		if(this.centeredIn != null && this.isCentered()){
+			this.center(this.centeredIn.getMinX(), this.centeredIn.getMinY(), this.centeredIn.getMaxX(), this.centeredIn.getMaxY());
+		}
+		System.out.println(this.isCentered());
+		System.out.println(this.getSize());
 	}
 	
 }

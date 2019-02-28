@@ -30,38 +30,32 @@ public class Timer {
 		t.getKeyFrames().add(kt);
 		
 	}
-	/* _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Adds a new action to the TimeLine to be performed */
 	public void addKeyFrame(EventHandler<ActionEvent> ae){ 	
 		KeyFrame kf = new KeyFrame(Duration.millis(1000 / 60), ae);
 		t.getKeyFrames().add(kf);
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Returns a String representation of the Timer */
 	public String toString(){ 
 		return "Timer [ticks: " + this.ticks + ", isCounting: " + this.isCounting + "]";
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Starts the Timer */
 	public void start(){ 
 		t.play();
 	}
-	/* _ _ _ _ _ _ _ _ */
 	
 	/* Starts a count to get the number of ticks passed in an interval */
 	public void startCount(){ 
 		this.isCounting = true;
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 	/* Stops the count and returns the number of ticks since startCount() has been called */
 	public int stopCount(){ 
 		this.isCounting = false;
 		return (int) this.count;
 	}
-	/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ */
 	
 }
