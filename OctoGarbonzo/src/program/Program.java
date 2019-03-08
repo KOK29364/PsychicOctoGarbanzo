@@ -1,5 +1,7 @@
 package program;
 
+import java.io.File;
+
 import javafx.application.Application;
 
 import javafx.event.EventHandler;
@@ -9,11 +11,15 @@ import javafx.geometry.Dimension2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 
 import javafx.stage.Stage;
+
 import terrain.Grid;
+import terrain.GridReader;
 
 public class Program extends Application{
 	
@@ -21,7 +27,7 @@ public class Program extends Application{
 	private static final double PANE_HEIGHT = 720; // Height of the window
 	private static double tileSize = 50;
 	
-	private static Grid g = new Grid(new Dimension2D(4, 4), tileSize); // Create a hexagonal Grid
+	private static Grid g;// = new Grid(new Dimension2D(5, 5), tileSize); // Create a hexagonal Grid
 	
 	private static Canvas c; // Create the Canvas
 	
@@ -36,6 +42,10 @@ public class Program extends Application{
 		
 //		stage.setFullScreen(true);
 //		stage.setMaximized(true);
+		
+		//File f = new File("res/lvl1.txt");
+		//System.out.println(f.getAbsolutePath());
+		g = GridReader.readGrid("res/lvl1.txt");
 		
 		g.center(0, 0, PANE_WIDTH, PANE_HEIGHT);
 		
@@ -61,6 +71,18 @@ public class Program extends Application{
 				g.setTileSize(tileSize);
 			}
 		});
+		c.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode() == KeyCode.UP){
+					System.out.println("p");
+					g.shift(0, 1000);
+				}
+			}
+			
+		});
+		
 		
 		Scene scene = new Scene(root, c.getWidth(), c.getHeight());
 		stage.setScene(scene);

@@ -24,6 +24,11 @@ public class Tile{
 		this.orientation = orientation;
 		
 	}
+
+	/* Initialize a Tile with no values set */
+	public Tile(){
+		
+	}
 	
 	/* Draw the hexagonal Tile using formulas for regular hexagons */
 	public void draw(GraphicsContext gc){ 

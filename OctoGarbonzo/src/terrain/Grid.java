@@ -20,14 +20,36 @@ public class Grid {
 		double w = Math.sqrt(3) * tileSize;
 		double h = 2 * tileSize;
 		
-		this.location = new Point2D(0, 0);
+		this.location = new Point2D(this.getSize(w, h, Tile.POINTY).getWidth() / 2, this.getSize(w, h, Tile.POINTY).getHeight());
 		
 		for(int x = 0; x < tiles.length; x ++){
 			for(int y = 0; y < tiles[x].length; y ++){
-					tiles[x][y] = new Tile(new Point2D((w + (x * 2 * w) + ((w * (y % 2)))) / 2, (h + (y * (1.5) * h)) / 2), tileSize, Tile.POINTY);
+					this.tiles[x][y] = new Tile(new Point2D((w + (x * 2 * w) + ((w * (y % 2)))) / 2, (h + (y * (1.5) * h)) / 2), tileSize, Tile.POINTY);
 			}
 		}
 		
+	}
+
+	/* Initialize a new Grid with the specified Tiles */
+	public Grid(boolean[][] tiles){
+		this.tiles = new Tile[tiles.length][tiles[0].length];
+		this.location = new Point2D(0, 0);
+		
+		System.out.println(tiles.length + " " + tiles[0].length);
+		
+		double w = Math.sqrt(3) * 50;
+		double h = 2 * 50;
+		
+		for(int x = 0; x < tiles.length; x ++){
+			for(int y = 0; y < tiles[x].length; y ++){
+				if(tiles[x][y]){
+					this.tiles[x][y] = new Tile(new Point2D((w + (x * 2 * w) + ((w * (y % 2)))) / 2, (h + (y * (1.5) * h)) / 2), 50, Tile.POINTY);
+					System.out.println(new Point2D((w + (x * 2 * w) + ((w * (y % 2)))) / 2, (h + (y * (1.5) * h)) / 2));
+				}
+				else
+					this.tiles[x][y] = null;
+			}
+		}
 	}
 	
 	/* Returns a String representation of the Grid */
@@ -45,10 +67,12 @@ public class Grid {
 		
 		for(int x = 0; x < tiles.length; x ++){
 			for(int y = 0; y < tiles[x].length; y ++){
-				tiles[x][y].changeOrientation(tileOrientation);
+				if(this.tiles[x][y] != null){
+					tiles[x][y].changeOrientation(tileOrientation);
 				
-				tiles[x][y].shift(((w + (x * ((tileOrientation)? 2:1.5) * w) + ((tileOrientation)? (w * (y % 2)):0)) / 2) - tiles[x][y].getLocation().getX(),
-									(h + (y * ((tileOrientation)? 1.5:2) * h) + ((tileOrientation)? 0:h * (x % 2))) / 2 - tiles[x][y].getLocation().getY());
+					tiles[x][y].shift(((w + (x * ((tileOrientation)? 2:1.5) * w) + ((tileOrientation)? (w * (y % 2)):0)) / 2) - tiles[x][y].getLocation().getX(),
+										(h + (y * ((tileOrientation)? 1.5:2) * h) + ((tileOrientation)? 0:h * (x % 2))) / 2 - tiles[x][y].getLocation().getY());
+				}
 			}
 		}
 		
@@ -61,8 +85,10 @@ public class Grid {
 		
 		for(int x = 0; x < tiles.length; x ++){
 			for(int y = 0; y < tiles[x].length; y ++){
-				tiles[x][y].setSize(tileSize);
-				tiles[x][y].setLocation(new Point2D(((w + (x * 2 * w) + ((w * (y % 2)))) / 2), ((h + (y * (1.5) * h)) / 2)));
+				if(this.tiles[x][y] != null){
+					tiles[x][y].setSize(tileSize);
+					tiles[x][y].setLocation(new Point2D(((w + (x * 2 * w) + ((w * (y % 2)))) / 2), ((h + (y * (1.5) * h)) / 2)));
+				}
 			}
 		}
 	}
@@ -79,7 +105,18 @@ public class Grid {
 		double h = this.tiles[0][0].getDimensions().getHeight();
 		
 		return new Dimension2D((this.tiles.length * w) + ((this.tiles[0][0].getOrientation())? w / 2:0),
-							(this.tiles[0].length * h) + ((this.tiles[0][0].getOrientation())? 0:h / 2));
+							(this.tiles[0].length / 2.0 * 1.75 * h) + ((this.tiles[0][0].getOrientation())? -(tiles[0].length - 2) * h / 8:h / 2));
+	
+	}
+	
+	/* Returns the width and height of the entire Grid */
+	public Dimension2D getSize(double tileWidth, double tileHeight, boolean tileOrientation){ 
+		
+		double w = tileWidth;
+		double h = tileHeight;
+		
+		return new Dimension2D((this.tiles.length * w) + ((tileOrientation)? w / 2:0),
+							(this.tiles[0].length / 2.0 * 1.75 * h) + ((tileOrientation)? -(tiles[0].length - 2) * h / 8:h / 2));
 	
 	}
 	
@@ -93,9 +130,18 @@ public class Grid {
 		
 		for(int x = 0; x < this.tiles.length; x ++){
 			for(int y = 0; y < this.tiles[x].length; y ++){
-				this.tiles[x][y].shift(deltaX, deltaY);
+				if(this.tiles[x][y] != null)
+					this.tiles[x][y].shift(deltaX, deltaY);
 			}
 		}
+		
+	}
+	
+	/* Changes the location of the Grid by the specified amount */
+	public void shift(double deltaX, double deltaY){
+		
+		this.setLocation(new Point2D(this.getLocation().getX() + deltaX, this.getLocation().getY() + deltaY));
+		this.centeredIn = null;
 		
 	}
 	
@@ -124,12 +170,11 @@ public class Grid {
 		return false;
 	}
 	
+	/* Actions to be performed each frame */
 	public void tick(){
 		if(this.centeredIn != null && this.isCentered()){
 			this.center(this.centeredIn.getMinX(), this.centeredIn.getMinY(), this.centeredIn.getMaxX(), this.centeredIn.getMaxY());
 		}
-		System.out.println(this.isCentered());
-		System.out.println(this.getSize());
 	}
 	
 }
