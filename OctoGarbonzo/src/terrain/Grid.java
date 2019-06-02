@@ -32,7 +32,7 @@ public class Grid {
 
 	/* Initialize a new Grid with the specified Tiles */
 	public Grid(boolean[][] tiles){
-		this.tiles = new Tile[tiles.length][tiles[0].length];
+		this.tiles = new Tile[tiles[0].length][tiles.length];
 		this.location = new Point2D(0, 0);
 		
 		System.out.println(tiles.length + " " + tiles[0].length);
@@ -40,11 +40,11 @@ public class Grid {
 		double w = Math.sqrt(3) * 50;
 		double h = 2 * 50;
 		
-		for(int x = 0; x < tiles.length; x ++){
-			for(int y = 0; y < tiles[x].length; y ++){
-				if(tiles[x][y]){
+		for(int y = 0; y < tiles.length; y ++){
+			System.out.println();
+			for(int x = 0; x < tiles[y].length; x ++){
+				if(tiles[y][x]){
 					this.tiles[x][y] = new Tile(new Point2D((w + (x * 2 * w) + ((w * (y % 2)))) / 2, (h + (y * (1.5) * h)) / 2), 50, Tile.POINTY);
-					System.out.println(new Point2D((w + (x * 2 * w) + ((w * (y % 2)))) / 2, (h + (y * (1.5) * h)) / 2));
 				}
 				else
 					this.tiles[x][y] = null;
@@ -80,11 +80,21 @@ public class Grid {
 	
 	/* Set the size of all the Tiles in the Grid */
 	public void setTileSize(double tileSize){
-		double w = (tiles[0][0].getOrientation())? Math.sqrt(3) * tileSize:2 * tileSize;
-		double h = (tiles[0][0].getOrientation())? 2 * tileSize:Math.sqrt(3) * tileSize;
+		int x = 0, y = 0;
+		while(this.tiles[x][y] == null){
+			if(x == this.tiles[0].length){
+				x = 0;
+				y ++;
+			}
+			else{
+				x ++;
+			}		
+		}
+		double w = (tiles[x][y].getOrientation())? Math.sqrt(3) * tileSize:2 * tileSize;
+		double h = (tiles[x][y].getOrientation())? 2 * tileSize:Math.sqrt(3) * tileSize;
 		
-		for(int x = 0; x < tiles.length; x ++){
-			for(int y = 0; y < tiles[x].length; y ++){
+		for(x = 0; x < tiles.length; x ++){
+			for(y = 0; y < tiles[x].length; y ++){
 				if(this.tiles[x][y] != null){
 					tiles[x][y].setSize(tileSize);
 					tiles[x][y].setLocation(new Point2D(((w + (x * 2 * w) + ((w * (y % 2)))) / 2), ((h + (y * (1.5) * h)) / 2)));
@@ -100,12 +110,23 @@ public class Grid {
 	
 	/* Returns the width and height of the entire Grid */
 	public Dimension2D getSize(){ 
+
+		int x = 0, y = 0;
+		while(this.tiles[x][y] == null){
+			if(x == this.tiles[0].length){
+				x = 0;
+				y ++;
+			}
+			else{
+				x ++;
+			}		
+		}
 		
-		double w = this.tiles[0][0].getDimensions().getWidth();
-		double h = this.tiles[0][0].getDimensions().getHeight();
-		
-		return new Dimension2D((this.tiles.length * w) + ((this.tiles[0][0].getOrientation())? w / 2:0),
-							(this.tiles[0].length / 2.0 * 1.75 * h) + ((this.tiles[0][0].getOrientation())? -(tiles[0].length - 2) * h / 8:h / 2));
+		double w = this.tiles[x][y].getDimensions().getWidth();
+		double h = this.tiles[x][y].getDimensions().getHeight();
+	
+		return new Dimension2D((this.tiles.length * w) + ((this.tiles[x][y].getOrientation())? w / 2:0),
+							(this.tiles[0].length / 2.0 * 1.75 * h) + ((this.tiles[x][y].getOrientation())? -(tiles[0].length - 2) * h / 8:h / 2));
 	
 	}
 	

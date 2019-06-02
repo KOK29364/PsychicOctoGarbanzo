@@ -1,12 +1,8 @@
 package program;
 
-import java.io.File;
-
 import javafx.application.Application;
 
 import javafx.event.EventHandler;
-
-import javafx.geometry.Dimension2D;
 
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -40,11 +36,6 @@ public class Program extends Application{
 	/* Start the Program */
 	public void start(Stage stage) throws Exception {
 		
-//		stage.setFullScreen(true);
-//		stage.setMaximized(true);
-		
-		//File f = new File("res/lvl1.txt");
-		//System.out.println(f.getAbsolutePath());
 		g = GridReader.readGrid("res/lvl1.txt");
 		
 		g.center(0, 0, PANE_WIDTH, PANE_HEIGHT);
@@ -102,8 +93,8 @@ public class Program extends Application{
 	
 	/* Updates the screen by redrawing all objects */
 	public static void draw(GraphicsContext gc){ 
-		gc.clearRect(0, 0, PANE_WIDTH, PANE_HEIGHT);
-		g.draw(gc);
+		gc.clearRect(0, 0, PANE_WIDTH, PANE_HEIGHT); // Clear the window
+		g.draw(gc); // Draw the Grid
 	}
 
 }

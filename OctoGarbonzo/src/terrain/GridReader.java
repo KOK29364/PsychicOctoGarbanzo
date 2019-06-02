@@ -1,63 +1,43 @@
 package terrain;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 
 public class GridReader {
 
 	public static Grid readGrid(String file) throws FileNotFoundException, IOException{
-
-		BufferedReader br = new BufferedReader(new FileReader(new File(file)));
-		ArrayList<ArrayList<Boolean>> t = new ArrayList<ArrayList<Boolean>>();
 		
-		String read = br.readLine();
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String[] in = new String[1];
+		int maxLength = 0;
 		
-		int line = 0;
-		int width = 0;
-		
-		while(read != null){
-			t.add(new ArrayList<Boolean>());
-			
-			String[] tl = read.split(" ");
-			for(String p : tl){
-				if(p.equals("1")){
-					t.get(line).add(true);
-				}
-				else{
-					t.get(line).add(false);
-				}
+		while((in[in.length - 1] = br.readLine()) != null){ //Read file into the array until the end of file
+			in[in.length - 1] = in[in.length - 1].replaceAll(" ", "");
+			if(in[in.length - 1].length() > maxLength){
+				maxLength = in[in.length - 1].length();
 			}
-			if(t.get(line).size() > width){
-				width = t.get(line).size();
-			}
-			try {
-				read = br.readLine();
-			} catch (IOException e) {
-				break;
-			}
+			in = Arrays.copyOf(in, in.length + 1); //Expand array by one
 		}
-		
+		in = Arrays.copyOf(in, in.length - 1); //Filter out the last element
 		br.close();
 		
-		boolean[][] tiles = new boolean[t.size()][width];
+		boolean[][] tiles = new boolean[in.length][maxLength];
 		
-		for(int x = 0; x < tiles[0].length; x ++){
-			for(int y = 0; y < tiles.length; y ++){
-				try{
-					tiles[y][x] = t.get(y).get(x);
-				}
-				catch(IndexOutOfBoundsException e){
-					tiles[y][x] = false;
-				}
+		for(int i = 0; i < in.length; i ++){
+			char[] ch = Arrays.copyOf(in[i].toCharArray(), maxLength);
+			for(int c = 0; c < ch.length; c ++){
+				if(ch[c] == '1')
+					tiles[i][c] = true;
+				else
+					tiles[i][c] = false;
 			}
 		}
 		
 		return new Grid(tiles);
-		
 		
 	}
 	
