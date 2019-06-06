@@ -27,7 +27,7 @@ public class Tile {
 		this.height = height;
 		
 		this.mesh = new MeshView(Tile.createHexagonMesh(this.size, this.height));
-		this.mesh.setMaterial(new PhongMaterial(Color.BLACK));
+		this.mesh.setMaterial(new PhongMaterial(Color.GREY));
 		this.mesh.setTranslateX(this.location.getX());
 		this.mesh.setTranslateY(this.location.getY());
 		this.mesh.setTranslateZ(this.location.getZ());
@@ -56,19 +56,20 @@ public class Tile {
 	/* Create a hexagon-shaped TriangleMesh */
 	public static TriangleMesh createHexagonMesh(float size, float height){
 		TriangleMesh ret = new TriangleMesh();
+		ret.getTexCoords().addAll(0,0);
 		ret.getPoints().addAll(
-	 			size * (float) Math.cos(0),						0,			size * (float) Math.sin(0),
-	 			size * (float) Math.cos(Math.PI / 3),			0, 			size * (float) Math.sin(Math.PI / 3),
-	 			size * (float) Math.cos(Math.PI / 3 * 2),		0, 			size * (float) Math.sin(Math.PI / 3 * 2),
-	 			size * (float) Math.cos(Math.PI),				0, 			size * (float) Math.sin(Math.PI),
-	 			size * (float) Math.cos(Math.PI / 3 * 4),		0, 			size * (float) Math.sin(Math.PI / 3 * 4),
-	 			size * (float) Math.cos(Math.PI / 3 * 5),		0,			size * (float) Math.sin(Math.PI / 3 * 5),
-	 			size * (float) Math.cos(0), 					height, 	size * (float) Math.sin(0),
-	 			size * (float) Math.cos(Math.PI / 3),			height, 	size * (float) Math.sin(Math.PI / 3),
-	 			size * (float) Math.cos(Math.PI / 3 * 2),		height, 	size * (float) Math.sin(Math.PI / 3 * 2),
-	 			size * (float) Math.cos(Math.PI), 				height, 	size * (float) Math.sin(Math.PI),
-	 			size * (float) Math.cos(Math.PI / 3 * 4),		height, 	size * (float) Math.sin(Math.PI / 3 * 4),
-	 			size * (float) Math.cos(Math.PI / 3 * 5), 		height, 	size * (float) Math.sin(Math.PI / 3 * 5)
+	 			size * (float) Math.cos(0),						-height / 2,			size * (float) Math.sin(0),
+	 			size * (float) Math.cos(Math.PI / 3),			-height / 2, 			size * (float) Math.sin(Math.PI / 3),
+	 			size * (float) Math.cos(Math.PI / 3 * 2),		-height / 2, 			size * (float) Math.sin(Math.PI / 3 * 2),
+	 			size * (float) Math.cos(Math.PI),				-height / 2, 			size * (float) Math.sin(Math.PI),
+	 			size * (float) Math.cos(Math.PI / 3 * 4),		-height / 2, 			size * (float) Math.sin(Math.PI / 3 * 4),
+	 			size * (float) Math.cos(Math.PI / 3 * 5),		-height / 2,			size * (float) Math.sin(Math.PI / 3 * 5),
+	 			size * (float) Math.cos(0), 					height / 2, 			size * (float) Math.sin(0),
+	 			size * (float) Math.cos(Math.PI / 3),			height / 2, 			size * (float) Math.sin(Math.PI / 3),
+	 			size * (float) Math.cos(Math.PI / 3 * 2),		height / 2, 			size * (float) Math.sin(Math.PI / 3 * 2),
+	 			size * (float) Math.cos(Math.PI), 				height / 2, 			size * (float) Math.sin(Math.PI),
+	 			size * (float) Math.cos(Math.PI / 3 * 4),		height / 2, 			size * (float) Math.sin(Math.PI / 3 * 4),
+	 			size * (float) Math.cos(Math.PI / 3 * 5), 		height / 2,				size * (float) Math.sin(Math.PI / 3 * 5)
 	 	);
 		ret.getFaces().addAll(
 	 			// Top Faces

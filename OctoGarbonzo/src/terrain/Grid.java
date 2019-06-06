@@ -1,8 +1,8 @@
 package terrain;
 
 import javafx.geometry.Point3D;
+
 import javafx.scene.Group;
-import javafx.scene.shape.MeshView;
 
 public class Grid {
 
@@ -11,20 +11,18 @@ public class Grid {
 	// private Rectangle2D centeredIn;
 	
 	/* Initialize a new Grid with a specified number of Tiles and size for the Tiles */
-	public Grid(int row, int column, float tileSize){
+	public Grid(int row, int column, float tileSize, double gapCo){
 		
-		double w = Math.sqrt(3) * tileSize;
-		double h = 2 * tileSize;
+		double h = Math.sqrt(3) * tileSize * gapCo;
+		double w = 2 * tileSize * gapCo;
 		
 		this.location = new Point3D(0, 0, 0);
-		
-		MeshView stMesh = new MeshView(Tile.createHexagonMesh(tileSize, 3));
 		
 		this.tiles = new Group();
 		
 		for(int x = 0; x < row; x ++){
-			for(int y = 0; y < column; y ++){
-					Tile toAdd = new Tile(new Point3D((w + (x * 2 * w) + ((w * (y % 2)))) / 2, 0, (h + (y * (1.5) * h)) / 2), tileSize, 3);
+			for(int y = 0; y < column; y ++){ // (w + (x * 2 * w) + ((w * (y % 2)))) / 2
+					Tile toAdd = new Tile(new Point3D((w + (x * (1.5) * w)) / 2, 0, (h + (y * 2 * h) + ((h * (x % 2)))) / 2), tileSize, (float) 0.5);
 					this.tiles.getChildren().add(toAdd.getMesh());
 			}
 		}
