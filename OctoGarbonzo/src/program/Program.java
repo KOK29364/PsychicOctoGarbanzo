@@ -4,13 +4,16 @@ import javafx.application.Application;
 
 import javafx.beans.property.SimpleDoubleProperty;
 
-import javafx.scene.Camera;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.PointLight;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javafx.scene.paint.Color;
 
@@ -23,11 +26,9 @@ import terrain.Grid;
 
 public class Program extends Application{
 	
-	// private static double tileSize = 50;
+	private static Grid g; // Create a hexagonal Grid
 	
-	private static Grid g;// = new Grid(new Dimension2D(5, 5), tileSize); // Create a hexagonal Grid
-	
-	Timer t = new Timer(); // Create a new Timer to count track the frames
+	private static Timer t = new Timer(); // Create a new Timer to count track the frames
 
 	public static void main(String[] args){
 		launch(args);
@@ -36,8 +37,7 @@ public class Program extends Application{
 	/* Start the Program */
 	public void start(Stage stage) throws Exception {
 		
-		g = new Grid(10, 10, 1, 1.15);
-		//Tile tile = new Tile(new Point3D(0, 0, 0), 3, 3);
+		g = new Grid(20, 20, 1, 1.15);
 		
 		SimpleDoubleProperty angleX = new SimpleDoubleProperty();
 		SimpleDoubleProperty angleY = new SimpleDoubleProperty();
@@ -50,36 +50,29 @@ public class Program extends Application{
         yRotate.angleProperty().bind(angleX);
         xRotate.angleProperty().bind(angleY);
         
+        Translate move = new Translate(0, 0, -50);
+        
         camera.getTransforms().addAll(
         		pivot,
         		yRotate,
         		xRotate,
-                new Translate(0, 0, -50)
+                move
         );
 
         PointLight bl = new PointLight();
         bl.setLightOn(true);
         bl.setTranslateY(-50);
         
+        pivot.setX(g.getSize().getHeight() / 2);
+        pivot.setY(0);
+        pivot.setZ(g.getSize().getWidth() / 2);
+        
 		Group root = new Group();
 
 		root.getChildren().addAll(g.getTiles().getChildren());
-		root.getChildren().stream()
-        	.filter(node -> !(node instanceof Camera))
-        	.forEach(node ->
-                node.setOnMouseClicked(event -> {
-                	pivot.setX(node.getTranslateX());
-                    pivot.setY(node.getTranslateY());
-                    pivot.setZ(node.getTranslateZ());
-                })
-        );
 
 		root.getChildren().add(bl);
 		root.getChildren().add(camera);
-		
-		pivot.setX(root.getChildren().get(0).getTranslateX());
-		pivot.setY(root.getChildren().get(0).getTranslateY());
-		pivot.setZ(root.getChildren().get(0).getTranslateZ());
 		
 		SubScene subScene = new SubScene(
 				root,
@@ -92,8 +85,8 @@ public class Program extends Application{
 		subScene.setOnScroll(event -> {
             angleX.set(angleX.doubleValue() + (event.getDeltaX() / 10));
             angleY.set(angleY.doubleValue() + (event.getDeltaY() / 10));
-            if(angleY.doubleValue() < -45){
-            	 angleY.set(-45);
+            if(angleY.doubleValue() < -55){
+            	 angleY.set(-55);
             }
             if(angleY.doubleValue() > -15){
            	 angleY.set(-15);
@@ -103,6 +96,20 @@ public class Program extends Application{
         group.getChildren().add(subScene);
 		
 		Scene scene = new Scene(group, 1024, 720);
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode().equals(KeyCode.DOWN) && move.getZ() > -80){
+					move.setZ(move.getZ() - 0.5);
+				}
+				if(event.getCode().equals(KeyCode.UP) && move.getZ() < -10){
+					move.setZ(move.getZ() + 0.5);
+				}
+			}
+			
+		});
+
 		stage.setScene(scene);
 		
 		stage.show();
@@ -114,7 +121,9 @@ public class Program extends Application{
 	
 	/* The actions to do each frame, such as updating the screen */
 	private static void tick(){ 
-		//g.tick();
+		
 	}
+	
+	/* */
 
 }

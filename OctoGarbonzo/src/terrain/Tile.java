@@ -1,6 +1,5 @@
 package terrain;
 
-
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -9,10 +8,6 @@ import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 
 public class Tile {
-
-	public static final boolean FLAT = false;
-	public static final boolean POINTY = true; // Booleans to represent the two orientations a hexagonal Tile can have: flat or pointy top
-	
 	
 	private Point3D location; // The coordinates of the Tile
 	private float size; // The size of one Tile, represented as the distance from its center to any corner
@@ -105,6 +100,7 @@ public class Tile {
 		return ret;
 	}
 	
+	/* Returns the hexagonal mesh of the Tile */
 	public MeshView getMesh(){
 		return this.mesh;
 	}
@@ -114,29 +110,16 @@ public class Tile {
 		return this.size;
 	}
 	
-	/* Changes the size of the Tile to the one provided */
-	public void setSize(float size){
-		this.size = size;
-	}
-	
 	/* Returns the coordinates of the Tile */
 	public Point3D getLocation() { 
 		return this.location;
-	}
-	
-	/* Sets the coordinates of the Tile to the one provided */
-	public void setLocation(Point3D location){
-		this.location = location;
-	}
-	
-	/* Shifts the coordinates of the Tile by the provided values */
-	public void shift(double x, double y, double z){ 
-		this.location = new Point3D(this.location.getX() + x, this.location.getY() + y, this.location.getZ() + z);
 	}
 	
 	/* Returns a String representation of the Tile */
 	public String toString(){
 		return "Tile [x location: " + this.location.getX() + ", y location: " + this.location.getY() + ", z location: " + this.location.getZ() + ", size: " + this.size + "]";
 	}
+	
+	/* */
 	
 }
