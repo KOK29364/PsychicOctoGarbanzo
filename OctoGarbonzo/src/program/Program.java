@@ -26,9 +26,9 @@ import terrain.Grid;
 
 public class Program extends Application{
 	
-	private static Grid g; // Create a hexagonal Grid
+	private static Grid grid; // Create a hexagonal Grid
 	
-	private static Timer t = new Timer(); // Create a new Timer to count track the frames
+	private static Timer timer = new Timer(); // Create a new Timer to count track the frames
 
 	public static void main(String[] args){
 		launch(args);
@@ -37,7 +37,7 @@ public class Program extends Application{
 	/* Start the Program */
 	public void start(Stage stage) throws Exception {
 		
-		g = new Grid(20, 20, 1, 1.15);
+		grid = new Grid(20, 20, 1, 1.15);
 		
 		SimpleDoubleProperty angleX = new SimpleDoubleProperty();
 		SimpleDoubleProperty angleY = new SimpleDoubleProperty();
@@ -63,13 +63,13 @@ public class Program extends Application{
         bl.setLightOn(true);
         bl.setTranslateY(-50);
         
-        pivot.setX(g.getSize().getHeight() / 2);
+        pivot.setX(grid.getSize().getHeight() / 2);
         pivot.setY(0);
-        pivot.setZ(g.getSize().getWidth() / 2);
+        pivot.setZ(grid.getSize().getWidth() / 2);
         
 		Group root = new Group();
 
-		root.getChildren().addAll(g.getTiles().getChildren());
+		root.getChildren().addAll(grid.getTiles().getChildren());
 
 		root.getChildren().add(bl);
 		root.getChildren().add(camera);
@@ -114,8 +114,8 @@ public class Program extends Application{
 		
 		stage.show();
 		
-		t.addKeyFrame(ae -> {tick();});
-		t.start();
+		timer.addKeyFrame(ae -> {tick();});
+		timer.start();
 		
 	}
 	
