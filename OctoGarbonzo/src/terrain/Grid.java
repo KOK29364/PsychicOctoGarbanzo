@@ -5,6 +5,8 @@ import javafx.geometry.Point3D;
 
 import javafx.scene.Group;
 
+import javafx.scene.shape.TriangleMesh;
+
 public class Grid {
 
 	private Group tiles; // The Group of the mesh of each Tile in the Grid
@@ -20,9 +22,11 @@ public class Grid {
 		
 		this.size = new Dimension2D((row / 2.0 * 1.75 * w) + (w / 2), (column * h) - (h / Math.sqrt(3))); // TO-DO: Get this to work properly
 		
+		TriangleMesh tm = Tile.createHexagonMesh(tileSize, (float) 0.4);
+		
 		for(int x = 0; x < row; x ++){
 			for(int y = 0; y < column; y ++){
-					Tile toAdd = new Tile(new Point3D((w + (x * (1.5) * w)) / 2, 0, (h + (y * 2 * h) + ((h * (x % 2)))) / 2), tileSize, (float) 0.5);
+					Tile toAdd = new Tile(new Point3D((w + (x * (1.5) * w)) / 2, 0, (h + (y * 2 * h) + ((h * (x % 2)))) / 2), tileSize, (float) 0.4, tm);
 					this.tiles.getChildren().add(toAdd.getMesh());
 			}
 		}

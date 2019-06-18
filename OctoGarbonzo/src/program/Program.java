@@ -37,7 +37,7 @@ public class Program extends Application{
 	/* Start the Program */
 	public void start(Stage stage) throws Exception {
 		
-		grid = new Grid(20, 20, 1, 1.15);
+		grid = new Grid(20, 20, 1, 1.1);
 		
 		SimpleDoubleProperty angleX = new SimpleDoubleProperty();
 		SimpleDoubleProperty angleY = new SimpleDoubleProperty();
@@ -63,6 +63,11 @@ public class Program extends Application{
         bl.setLightOn(true);
         bl.setTranslateY(-50);
         
+        PointLight tl = new PointLight();
+        tl.setLightOn(true);
+        tl.setTranslateY(50);
+        tl.setColor(Color.CYAN);
+        
         pivot.setX(grid.getSize().getHeight() / 2);
         pivot.setY(0);
         pivot.setZ(grid.getSize().getWidth() / 2);
@@ -72,6 +77,7 @@ public class Program extends Application{
 		root.getChildren().addAll(grid.getTiles().getChildren());
 
 		root.getChildren().add(bl);
+		root.getChildren().add(tl);
 		root.getChildren().add(camera);
 		
 		SubScene subScene = new SubScene(

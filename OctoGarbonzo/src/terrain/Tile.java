@@ -22,7 +22,7 @@ public class Tile {
 		this.height = height;
 		
 		this.mesh = new MeshView(Tile.createHexagonMesh(this.size, this.height));
-		this.mesh.setMaterial(new PhongMaterial(Color.GREY));
+		this.mesh.setMaterial(new PhongMaterial(Color.LIGHTGREY));
 		this.mesh.setTranslateX(this.location.getX());
 		this.mesh.setTranslateY(this.location.getY());
 		this.mesh.setTranslateZ(this.location.getZ());
@@ -30,13 +30,13 @@ public class Tile {
 	}
 	
 	/* Initialize the Tile with a given location, size, height and mesh */
-	public Tile(Point3D location, float size, float height, MeshView mesh){
+	public Tile(Point3D location, float size, float height, TriangleMesh mesh){
 		
 		this.location = location;
 		this.size = size;
 		this.height = height;
 		
-		this.mesh = mesh;
+		this.mesh = new MeshView(mesh);
 		this.mesh.setTranslateX(this.location.getX());
 		this.mesh.setTranslateY(this.location.getY());
 		this.mesh.setTranslateZ(this.location.getZ());
@@ -117,7 +117,7 @@ public class Tile {
 	
 	/* Returns a String representation of the Tile */
 	public String toString(){
-		return "Tile [x location: " + this.location.getX() + ", y location: " + this.location.getY() + ", z location: " + this.location.getZ() + ", size: " + this.size + "]";
+		return "Tile [x location: " + this.location.getX() + ", y location: " + this.location.getY() + ", z location: " + this.location.getZ() + ", size: " + this.size + ", height: " + this.height + "]";
 	}
 	
 	/* */
